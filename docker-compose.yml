@@ -1,0 +1,36 @@
+services:
+  chainlink:
+    image: smartcontract/chainlink:2.25.0
+    ports:
+      - "6688:6688"
+    env_file:
+      - cl-node.env
+    volumes:
+      - ./config:/chainlink/config
+      - chainlink_data:/chainlink
+    depends_on:
+      - postgres
+    restart: always
+    networks:
+      - chainlink-net
+
+  postgres:
+    image: postgres:13
+    env_file:
+      - cl-node.env
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+      - POSTGRES_DB=${PG_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - chainlink-net
+
+networks:
+  chainlink-net:
+    - driver: bridge
+
+volumes:
+  chainlink_data:
+  postgres_data:
