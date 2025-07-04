@@ -1,0 +1,20 @@
+# Secrets
+.env
+
+# Docker
+**/docker-compose.override.yml
+**/docker-compose.*.yml
+
+# Chainlink data
+chainlink_data/
+*.db
+*.sqlite
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
