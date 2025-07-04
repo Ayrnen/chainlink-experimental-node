@@ -1,20 +1,57 @@
-LogLevel = "info"
+########################################
+# Chainlink Node Configuration (v2.x)
+########################################
+
+# ——— Environment Variables to Define in cl-node.env ———
+# LISTEN_IP        — e.g. "0.0.0.0" or "127.0.0.1"
+# ALLOW_ORIGINS    — comma-separated CORS origins, e.g.
+#                    "http://localhost:6688,http://YOUR_VM_IP:6688"
+# HTTP_PORT        — e.g. 6688
+# METRICS_PORT     — e.g. 6689
+# TLS_CERT_PATH    — e.g. "/chainlink/certs/tls.crt" (if using native TLS)
+# TLS_KEY_PATH     — e.g. "/chainlink/certs/tls.key" (if using native TLS)
+
+# ——— Node Runtime ———
+LogLevel                           = "info"
 DefaultJobPipelineMaxInFlightTasks = 10
 
+# ——— Database (Postgres) ———
 DatabaseURL = "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
 
-[WebServer]
-  HTTPPort        = 6688
-  ListenIP        = "0.0.0.0"                          # binds to all interfaces
-  AllowOrigins    = "http://localhost:3000,http://localhost:6688"
-  SecureCookies   = true
+# ——— API Server (Web UI + JSON-RPC) ———
+WebServer    = true
+Port         = ${HTTP_PORT}
+ListenIP     = "${LISTEN_IP}"
+AllowOrigins = "${ALLOW_ORIGINS}"
+SecureCookies = true
 
-P2PListeningPort = 0
+# ——— Optional: Enable native TLS on port 6689 ———
+# Uncomment if you want Chainlink itself to serve HTTPS
+TLSCertPath = "${TLS_CERT_PATH}"
+TLSKeyPath  = "${TLS_KEY_PATH}"
+HTTPSPort   = 6689
+ForceRedirect = true
 
+# ——— P2P Networking (OCR/OCR2) ———
+P2PListenPort = 0
+
+# ——— JSON-RPC (optional) ———
+# JSONRPCEnabled = true
+# JSONRPCPort    = 6689
+
+# ——— OCR2 Settings (optional) ———
+# OCR2Bootstrap  = false
+# OCR2ContractID = "${OCR2_CONTRACT_ID}"
+
+# ——— Metrics (Prometheus) ———
 MetricsServer = true
-MetricsPort   = 6689
+MetricsPort   = ${METRICS_PORT}
 
+# ——— Telemetry (optional) ———
+# TelemetryIngress = "https://your-telemetry-endpoint"
+
+# ——— Chain-Specific Defaults ———
 [Ethereum]
-    ChainID = ${MAINNET_CHAIN_ID}
-    URL = "${ETH_URL}"
-    MinRequiredOutgoingConfirmations = 1
+  ChainID                          = ${MAINNET_CHAIN_ID}
+  URL                              = "${ETH_URL}"
+  MinRequiredOutgoingConfirmations = 1
