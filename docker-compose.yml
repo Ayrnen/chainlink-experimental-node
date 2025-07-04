@@ -7,6 +7,7 @@ services:
     env_file:
       - cl-node.env
     volumes:
+      - ./scripts:/chainlink/scripts
       - ./config:/chainlink/config
       - ./config/certs:/chainlink/certs # TLS Certs
       - chainlink_data:/chainlink
@@ -16,12 +17,7 @@ services:
     restart: always
     networks:
       - chainlink-net
-    command:
-      - "node"
-      - "-config"
-      - "/chainlink/config/chainlink-config.toml"
-      - "-secrets"
-      - "/chainlink/config/cl-node.env"
+    command: ["/chainlink/scripts/startup.sh"]
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:6688/health || exit 1"]
       interval: 30s
