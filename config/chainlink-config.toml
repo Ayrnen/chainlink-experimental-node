@@ -1,0 +1,20 @@
+LogLevel = "info"
+DefaultJobPipelineMaxInFlightTasks = 10
+
+DatabaseURL = "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
+
+[WebServer]
+  HTTPPort        = 6688
+  ListenIP        = "0.0.0.0"                          # binds to all interfaces
+  AllowOrigins    = "http://localhost:3000,http://localhost:6688"
+  SecureCookies   = true
+
+P2PListeningPort = 0
+
+MetricsServer = true
+MetricsPort   = 6689
+
+[Ethereum]
+    ChainID = ${MAINNET_CHAIN_ID}
+    URL = "${ETH_URL}"
+    MinRequiredOutgoingConfirmations = 1
