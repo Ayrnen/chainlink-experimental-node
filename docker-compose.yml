@@ -2,11 +2,13 @@ services:
   chainlink:
     image: smartcontract/chainlink:2.25.0
     ports:
-      - "6688:6688"
+      - "6688:6688"   # HTTP (Dashboard/API)
+      - "6689:6689"   # HTTPS (native TLS)
     env_file:
       - cl-node.env
     volumes:
       - ./config:/chainlink/config
+      - ./config/certs:/chainlink/certs # TLS Certs
       - chainlink_data:/chainlink
     depends_on:
       postgres:
