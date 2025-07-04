@@ -9,10 +9,22 @@ services:
       - ./config:/chainlink/config
       - chainlink_data:/chainlink
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: always
     networks:
       - chainlink-net
+    command:
+      - "node"
+      - "-config"
+      - "/chainlink/config/chainlink-config.toml"
+      - "-secrets"
+      - "/chainlink/config/cl-node.env"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6688/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   postgres:
     image: postgres:13
@@ -26,6 +38,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - chainlink-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   chainlink-net:
