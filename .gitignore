@@ -18,3 +18,7 @@ chainlink_data/
 
 # Logs
 *.log
+
+# Certs
+*.crt
+*.key
