@@ -22,3 +22,4 @@ chainlink_data/
 # Certs
 *.crt
 *.key
+*.json
